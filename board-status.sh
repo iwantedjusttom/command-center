@@ -34,9 +34,20 @@ if [ -z "${OID:-}" ]; then
   echo "board-status: no column named \"$STATUS\" on Project #$PROJ_NUM" >&2; exit 1
 fi
 
-# Content node id (works for both issues and PRs)
-CID=$(gh api graphql -f query="query { repository(owner:\"$OWNER\", name:\"$REPO\") { issueOrPullRequest(number:$NUM) { ... on Issue { id } ... on PullRequest { id } } } }" \
-  --jq '.data.repository.issueOrPullRequest.id')
+# Content node id + state (works for both issues and PRs)
+eval "$(gh api graphql -f query="query { repository(owner:\"$OWNER\", name:\"$REPO\") { issueOrPullRequest(number:$NUM) { ... on Issue { id state } ... on PullRequest { id state } } } }" \
+  --jq '"CID=\(.data.repository.issueOrPullRequest.id); CSTATE=\(.data.repository.issueOrPullRequest.state)"')"
+
+# Race guard: a closed/merged item must never be dragged back to a pre-close
+# column. GitHub's built-in "Item closed -> Closed" workflow owns the Closed
+# move the instant a PR merges; if a late Building/In Review write (e.g.
+# build-loop's final step landing just after Tom merges) overwrote it, the card
+# would wrongly resurrect. So once the item is closed, only an explicit "Closed"
+# request is honored — everything else is a no-op.
+if [ "$STATUS" != "Closed" ] && { [ "$CSTATE" = "CLOSED" ] || [ "$CSTATE" = "MERGED" ]; }; then
+  echo "board: $REPO#$NUM is $CSTATE — skipping \"$STATUS\" (won't resurrect a finished card)"
+  exit 0
+fi
 
 # Add to board (idempotent: returns the existing item id if already present)
 ITEM=$(gh api graphql -f query="mutation { addProjectV2ItemById(input:{projectId:\"$PID\", contentId:\"$CID\"}) { item { id } } }" \
