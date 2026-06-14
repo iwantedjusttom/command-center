@@ -5,6 +5,8 @@ description: Tom's personal mission control — one place to see where every pro
 
 # Command Center — Tom's Mission Control
 
+> ⚠️ **RETIRED 2026-06-13.** This reporting skill is unregistered (its `.claude/skills` symlink was removed); the source is preserved here and revivable, the same way `walk-away` was parked. **Why:** once work moved fully to GitHub Issues, this skill kept no local data — it only re-read GitHub and reformatted it, duplicating GitHub's own boards + milestones (which Tom uses directly and likes). A cross-repo "catch me up" is now just an ask — Claude runs `gh` across the repos live, no skill needed. Its one piece of real machinery, **`board-status.sh`** (plus the **`BOARD.md`** reference doc), was **moved into the `board-mechanic` skill**, where `pipeline.sh` lives. **Before reviving:** re-read this why. If you genuinely want a one-shot cross-repo rundown often enough to not re-describe it each time, revive it as a thin ~10-line recipe — not this full scaffold.
+
 The point of this skill: Tom runs many projects at once and doesn't want to hold them all in his head or open each project's docs to remember what he's doing. This skill is the **layer above the individual projects** — it reads across all of them and answers "where does everything stand?" in one place, both as a chat rundown and as a standing file Tom can open.
 
 It pairs with the per-project skills — `design-queue` + `build-loop` (the GitHub-Issues pipeline) or legacy `build-loop` (three files) — which govern work *inside* one project. Command-center never builds features — it **reports and organizes across** projects. When Tom wants to actually work an item, hand off to the project (design-queue/build-loop take over there).
