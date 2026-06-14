@@ -29,7 +29,8 @@ Figure out which of these Tom is asking for, then do it. When in doubt, give the
      - **In flight** — `gh issue list --repo <repo> --label building` (a build agent is on it) plus any open PRs (`gh pr list --repo <repo>`, which are `in-review`).
      - **Next up** — `gh issue list --repo <repo> --label ready` (build-ready), in milestone-due order. `backlog`-labeled issues are known-but-not-yet-designed (design-queue's queue), list 1–2 if nothing's `ready`.
      - **Recently shipped** — recently **closed** issues with their merged PRs: `gh issue list --repo <repo> --state closed --limit 3` (and/or `gh pr list --state merged`).
-     - **Flags** — owner actions and gotchas pulled from **issue comments** and labels (e.g. "run migration 00XX"), plus **milestone** drift (open vs. closed in the nearest-due milestone = ahead / on track / behind).
+     - **⚠ Pending migrations** — `gh issue list --repo <repo> --label needs-migration --state open`. Each open one is a DB migration that's been **written/merged but not yet run against Supabase** — a deploy step Tom owns, separate from merging. Surface these prominently (they silently rot if a feature is "shipped" in code but its schema change was never applied). build-loop opens one per migration file; Tom closes it when he's run the SQL, so **open = not yet applied**.
+     - **Flags** — owner actions and gotchas pulled from **issue comments** and labels, plus **milestone** drift (open vs. closed in the nearest-due milestone = ahead / on track / behind).
    - **legacy build-loop (three-file) projects** (e.g. OverYay, callschedule, T3Academy): read `FEATURES.md` (+ `ROADMAP.md` if present, + the top of `PROJECT-LOG.md`). Extract **In flight** (`in-progress` items), **Next up** (top 1–3 unblocked `todo`, respecting ROADMAP order), **Recently shipped** (newest 1–3 `PROJECT-LOG.md` entries), and **Flags** (owner actions, open questions, ROADMAP drift).
 3. **For standalone apps** (no tracking docs), give status from agent memory + the file's recency. These won't have IDs — describe in plain words and note likely next steps from memory.
 4. **Compute the deadline radar** — pull every dated target (GitHub **milestone** due dates, legacy ROADMAP finish lines, the $10K goal date) and sort by how close it is. Convert to "in N days" against today's date.
@@ -62,6 +63,9 @@ If Tom names a project ("where's OverYay at"), skip the others — read just tha
 
 ⏱ Deadlines on the radar
 - <date> (<N days>) — <project>: <what>
+
+⚠ Pending migrations (written but not yet run on Supabase)
+- <project> #<issue> — migration <NNNN> <slug>   ← only show this block if any are open
 
 📊 At a glance
 | Project | Status | Now (in flight) | Next up | Needs Tom |

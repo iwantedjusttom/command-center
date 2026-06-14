@@ -93,7 +93,7 @@ Issues can exist at ANY maturity; the **label is the maturity signal**. The funn
 - **Open owner-actions (losable!):** run Supabase migrations **0015** + **0016** (Buddies/Support tabs broken until then); **merge or close stale PR #66**; answer **SC-026** design question (per-student vs per-team); confirm migrations 0007–0014 applied; verify SC-002 RLS at the 6/19 audit.
 - **Other projects:** OverYay (now at `C:\Users\iwant\projects\overYay`, VA-049 deploy in flight), callschedule (CS-013 in progress), T3Academy (paused, next T3-010), tatman-schedule (NEW, Jim's Towing, intake/spec stage).
 - **Permissions:** `~/.claude/settings.json` now allows `gh`, `git`, `npm`, etc. with a deny-list for destructive ops (repo delete, force push, supabase db push/reset). So agents can run `gh project` commands without prompts once the scope exists.
-- **command-center:** LEDGER.md + REGISTRY.md in `C:\Users\iwant\command-center\` are refreshed as of today.
+- **command-center:** the LEDGER.md + REGISTRY.md status files were retired 2026-06-13 — status is now read live from GitHub (issues, milestones, this board); no local status files.
 
 ---
 
@@ -105,4 +105,4 @@ A single-file **`mission-control.html`** that reads the GitHub API (issues + mil
 
 ## How to pick this up in a fresh session
 
-Say: _"Read C:\Users\iwant\command-center\HANDOFF-projects-board.md and continue — start at START HERE."_ A new session will see the refreshed token scope and can run `gh project` commands this one couldn't.
+Say: _"Read C:\Users\iwant\projects\skills\command-center\HANDOFF-projects-board.md and continue — start at START HERE."_ A new session will see the refreshed token scope and can run `gh project` commands this one couldn't.

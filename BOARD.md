@@ -1,10 +1,10 @@
 # 🗂️ Mission Control board — how it works
 
-_The single cross-repo kanban that holds issues from ALL Tom's GitHub repos. The live, visual version of the LEDGER. Built on GitHub — we don't rebuild GitHub._
+_The single cross-repo kanban that holds issues from ALL Tom's GitHub repos — the live, visual cross-project status. Built on GitHub — we don't rebuild GitHub._
 
 - **Board:** account-level GitHub Project **#1** — "Tom's feature list" — owner `iwantedjusttom`
 - **URL:** https://github.com/users/iwantedjusttom/projects/1
-- **Columns (the `Status` field):** `Idea → Ready → Building → In Review → Closed`
+- **Columns (the `Status` field):** `Idea → Ready → Building → In Review → Migrations → Closed` (`Migrations` is a side-lane for `needs-migration` deploy issues — DB migrations written/merged but not yet run on Supabase; closing the issue moves it to `Closed`)
 
 ## The maturity model — label = where it sits
 
@@ -16,7 +16,8 @@ An issue can exist at **any** maturity. The **label** is the signal; the board c
 | `ready` | Ready | designed + spec'd, buildable | design-queue |
 | `building` | Building | a build agent is on it | build-loop |
 | `in-review` | In Review | PR open, awaiting Tom's merge | build-loop |
-| _(closed)_ | Closed | shipped | GitHub auto-workflow on close |
+| `needs-migration` | Migrations | a DB migration written/merged but not yet run on Supabase | build-loop opens it; Tom **closes** it when he's run the SQL |
+| _(closed)_ | Closed | shipped (or, for a `needs-migration` issue, the migration has been run) | GitHub auto-workflow on close |
 
 **The design gate holds:** capture is one line, but nothing skips to `building` — design-queue is the only thing that produces `ready`.
 
@@ -24,10 +25,10 @@ An issue can exist at **any** maturity. The **label** is the signal; the board c
 
 ## Driving the board — `board-status.sh`
 
-`C:\Users\iwant\command-center\board-status.sh` is the one helper that slides a card.
+`C:\Users\iwant\projects\skills\command-center\board-status.sh` is the one helper that slides a card.
 
 ```
-bash /c/Users/iwant/command-center/board-status.sh <repo> <#> "<Column>"
+bash /c/Users/iwant/.claude/skills/command-center/board-status.sh <repo> <#> "<Column>"
 #   e.g. bash .../board-status.sh samcamp 98 Ready
 ```
 
@@ -38,7 +39,7 @@ bash /c/Users/iwant/command-center/board-status.sh <repo> <#> "<Column>"
 Capture an idea instantly (any agent):
 ```
 gh issue create --repo <repo> --title "Idea: …" --label idea
-bash /c/Users/iwant/command-center/board-status.sh <repo> <#> Idea
+bash /c/Users/iwant/.claude/skills/command-center/board-status.sh <repo> <#> Idea
 ```
 
 ## One-time UI setup (no CLI/API for these — Tom does them once)

@@ -9,7 +9,8 @@
 # - Idempotently adds the item to the board if it isn't there yet, then sets Status.
 # - Resolves the project/field/option IDs BY NAME every run, so renaming a
 #   column (e.g. Future -> Idea) never breaks callers. Status name is matched
-#   case-sensitively to a column: Idea | backlog | Ready | Building | In Review | Closed
+#   case-sensitively to a column: Idea | backlog | Ready | Building | In Review | Migrations | Closed
+#   (Migrations = side-lane for needs-migration deploy issues; closed -> Closed via the built-in workflow)
 set -euo pipefail
 
 OWNER="iwantedjusttom"
